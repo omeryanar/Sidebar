@@ -1,0 +1,171 @@
+﻿<UserControl x:Class="Sidebar.Module.Calculator.CalculatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             Background="{DynamicResource MaterialDesignPaper}" Padding="20,0">
+
+    <UserControl.Resources>
+        <Style x:Key="DigitButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+            <Setter Property="Command" Value="{Binding DigitButtonPressCommand}" />
+            <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
+        </Style>
+        <Style x:Key="DigitButtonAccentStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+            <Setter Property="Command" Value="{Binding DigitButtonPressCommand}" />
+            <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
+        </Style>
+        <Style x:Key="OperationButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+            <Setter Property="Command" Value="{Binding OperationButtonPressCommand}" />
+            <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
+        </Style>
+        <Style x:Key="SingularOperationButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+            <Setter Property="Command" Value="{Binding SingularOperationButtonPressCommand}" />
+            <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
+        </Style>
+    </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        
+        <KeyBinding Key="D0" CommandParameter="0" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D1" CommandParameter="1" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D2" CommandParameter="2" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D3" CommandParameter="3" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D4" CommandParameter="4" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D5" CommandParameter="5" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D6" CommandParameter="6" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D7" CommandParameter="7" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D8" CommandParameter="8" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="D9" CommandParameter="9" Command="{Binding DigitButtonPressCommand}" />
+        
+        <KeyBinding Key="NumPad0" CommandParameter="0" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad1" CommandParameter="1" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad2" CommandParameter="2" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad3" CommandParameter="3" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad4" CommandParameter="4" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad5" CommandParameter="5" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad6" CommandParameter="6" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad7" CommandParameter="7" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad8" CommandParameter="8" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="NumPad9" CommandParameter="9" Command="{Binding DigitButtonPressCommand}" />
+
+        <KeyBinding Key="Decimal" CommandParameter="." Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="Backspace" CommandParameter="Del" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="Delete" CommandParameter="CE" Command="{Binding DigitButtonPressCommand}" />
+        <KeyBinding Key="Esc" CommandParameter="C" Command="{Binding DigitButtonPressCommand}" />
+
+        <KeyBinding Key="D4" Modifiers="Shift" CommandParameter="+" Command="{Binding OperationButtonPressCommand}" />
+        <KeyBinding Key="D7" Modifiers="Shift" CommandParameter="/" Command="{Binding OperationButtonPressCommand}" />
+        <KeyBinding Key="OemMinus" CommandParameter="-" Command="{Binding OperationButtonPressCommand}" />
+        <KeyBinding Key="Oem8" CommandParameter="*" Command="{Binding OperationButtonPressCommand}" />        
+
+        <KeyBinding Key="Add" CommandParameter="+" Command="{Binding OperationButtonPressCommand}" />
+        <KeyBinding Key="Subtract" CommandParameter="-" Command="{Binding OperationButtonPressCommand}" />
+        <KeyBinding Key="Multiply" CommandParameter="*" Command="{Binding OperationButtonPressCommand}" />
+        <KeyBinding Key="Divide" CommandParameter="/" Command="{Binding OperationButtonPressCommand}" />
+        <KeyBinding Key="Enter" CommandParameter="=" Command="{Binding OperationButtonPressCommand}" />
+        
+    </UserControl.InputBindings>
+
+    <md:DrawerHost>
+        <md:DrawerHost.BottomDrawerContent>
+            <StackPanel>
+                <ListBox Height="210" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding History}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Button HorizontalAlignment="Left" Style="{DynamicResource MaterialDesignFlatButton}" Command="{DXCommand 'History.Clear()'}">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Delete" Width="20" Height="20" />
+                            <TextBlock Text="{Binding ResourceProvider.Data.Clear}" VerticalAlignment="Center" Margin="5,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button HorizontalAlignment="Right" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static md:DrawerHost.CloseDrawerCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="CloseCircle" Width="20" Height="20" />
+                            <TextBlock Text="{Binding ResourceProvider.Data.Close}" VerticalAlignment="Center" Margin="5,0" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </md:DrawerHost.BottomDrawerContent>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Margin="0,5" Grid.ColumnSpan="5">
+                <TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource PrimaryHueMidBrush}" Text="{Binding Expression}" />
+                <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" TextBlock.TextAlignment="Right" FontSize="22" Padding="0" Content="{Binding Display}">
+                    <Label.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem InputGestureText="Ctrl+C" Header="{Binding ResourceProvider.Data.Copy}" Command="{Binding CopyToClipboardCommand}" CommandParameter="{Binding Display}">
+                                <MenuItem.Icon>
+                                    <md:PackIcon Kind="ContentCopy" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem InputGestureText="Ctrl+V" Header="{Binding ResourceProvider.Data.Paste}" Command="{Binding PasteFromClipboardCommand}">
+                                <MenuItem.Icon>
+                                    <md:PackIcon Kind="ContentPaste" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Label.ContextMenu>
+                </Label>
+                <Rectangle HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource PrimaryHueMidBrush}"/>
+            </StackPanel>
+
+            <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static md:DrawerHost.OpenDrawerCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="History" Width="24" Height="24" />
+                    <TextBlock Text="{Binding ResourceProvider.Data.History}" VerticalAlignment="Center" Margin="5,0" />
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource DigitButtonAccentStyle}" Content="C" />
+            <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource DigitButtonAccentStyle}" Content="CE" />
+            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource DigitButtonAccentStyle}" Content="Del" />
+
+            <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource DigitButtonStyle}" Content="7" />
+            <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource DigitButtonStyle}" Content="8" />
+            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource DigitButtonStyle}" Content="9" />
+
+            <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource DigitButtonStyle}" Content="4" />
+            <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource DigitButtonStyle}" Content="5" />
+            <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource DigitButtonStyle}" Content="6" />
+
+            <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource DigitButtonStyle}" Content="1" />
+            <Button Grid.Row="4" Grid.Column="1" Style="{StaticResource DigitButtonStyle}" Content="2" />
+            <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource DigitButtonStyle}" Content="3" />
+
+            <Button Grid.Row="5" Grid.Column="0" Style="{StaticResource DigitButtonAccentStyle}" Content="+/-" />
+            <Button Grid.Row="5" Grid.Column="1" Style="{StaticResource DigitButtonStyle}" Content="0" />
+            <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource DigitButtonAccentStyle}" Content="." />
+
+            <Button Grid.Row="2" Grid.Column="3" Style="{StaticResource OperationButtonStyle}" Content="/" />
+            <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource OperationButtonStyle}" Content="*" />
+            <Button Grid.Row="4" Grid.Column="3" Style="{StaticResource OperationButtonStyle}" Content="-" />
+            <Button Grid.Row="5" Grid.Column="3" Style="{StaticResource OperationButtonStyle}" Content="+" />
+
+            <Button Grid.Row="2" Grid.Column="4" Style="{StaticResource SingularOperationButtonStyle}" Content="√" />
+            <Button Grid.Row="3" Grid.Column="4" Style="{StaticResource SingularOperationButtonStyle}" Content="%" />
+            <Button Grid.Row="4" Grid.Column="4" Style="{StaticResource SingularOperationButtonStyle}" Content="1/x" />
+            <Button Grid.Row="5" Grid.Column="4" Style="{StaticResource OperationButtonStyle}" Content="=" />
+
+        </Grid>
+    </md:DrawerHost>
+
+</UserControl>

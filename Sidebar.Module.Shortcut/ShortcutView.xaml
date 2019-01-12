@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="Sidebar.Module.Shortcut.ShortcutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:model ="clr-namespace:Sidebar.Module.Shortcut.Model"
+             xmlns:behaviors="clr-namespace:Sidebar.Common.Behaviors;assembly=Sidebar.Common"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+
+    <UserControl.Resources>
+        <Style x:Key="DrawerButton" TargetType="Button">
+            <Setter Property="Command" Value="{x:Static md:DrawerHost.OpenDrawerCommand}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                            <Setter Property="TextDecorations" Value="Underline" />
+                                            <Setter Property="FontWeight" Value="Medium" />
+                                            <Setter Property="Cursor" Value="Hand" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <md:DrawerHost>
+        <md:DrawerHost.BottomDrawerContent>
+            <StackPanel>
+                <dxmvvm:Interaction.Behaviors>
+                    <behaviors:ExplicitBindingsBehavior x:Name="ExplicitBindingsBehavior" />
+                </dxmvvm:Interaction.Behaviors>
+                <TextBox Style="{DynamicResource MaterialDesignFloatingHintTextBox}" md:HintAssist.Hint="{Binding ResourceProvider.Data.Title}" 
+                         Text="{Binding Caption, UpdateSourceTrigger=Explicit}" />
+                <TextBox Style="{DynamicResource MaterialDesignFloatingHintTextBox}" md:HintAssist.Hint="{Binding ResourceProvider.Data.Parameters}"
+                         Text="{Binding Arguments, UpdateSourceTrigger=Explicit}" />
+                <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button IsDefault="True" Content="{Binding ResourceProvider.Data.OK}" Style="{DynamicResource MaterialDesignFlatButton}">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxmvvm:CompositeCommandBehavior>
+                                <dxmvvm:CommandItem Command="{Binding AcceptCommand, ElementName=ExplicitBindingsBehavior}" />
+                                <dxmvvm:CommandItem Command="{x:Static md:DrawerHost.CloseDrawerCommand}" />
+                            </dxmvvm:CompositeCommandBehavior>
+                        </dxmvvm:Interaction.Behaviors>
+                    </Button>
+                    <Button IsCancel="True" Content="{Binding ResourceProvider.Data.Cancel}" Style="{DynamicResource MaterialDesignFlatButton}">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxmvvm:CompositeCommandBehavior>
+                                <dxmvvm:CommandItem Command="{Binding CancelCommand, ElementName=ExplicitBindingsBehavior}" />
+                                <dxmvvm:CommandItem Command="{x:Static md:DrawerHost.CloseDrawerCommand}" />
+                            </dxmvvm:CompositeCommandBehavior>
+                        </dxmvvm:Interaction.Behaviors>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </md:DrawerHost.BottomDrawerContent>
+        <DockPanel Background="{DynamicResource SecondaryAccentBrush}">
+            <DockPanel Width="150" Visibility="{Binding FullPath, Converter={dxmvvm:StringToVisibilityConverter Inverse=True}}">
+                <Button Command="{Binding SetDefaultShortcutCommand}" Style="{DynamicResource MaterialDesignFloatingActionButton}">
+                    <md:PackIcon Kind="Plus" Width="24" Height="24" />
+                    <Button.CommandParameter>
+                        <DockPanel>
+                            <DockPanel.DataContext>
+                                <model:DefaultShortcutCollection />
+                            </DockPanel.DataContext>
+                            <Button DockPanel.Dock="Bottom" Content="OK" HorizontalAlignment="Right" Style="{DynamicResource MaterialDesignFlatButton}" 
+                                    Command="{x:Static md:DialogHost.CloseDialogCommand}" CommandParameter="{Binding Shortcuts.CurrentItem}" />
+                            <ListBox IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Shortcuts}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <RadioButton VerticalAlignment="Center" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
+                                            <Image Margin="10,0" Width="32" Height="32" Source="{Binding ShortcutImage}" />
+                                            <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding Caption}" ToolTip="{Binding Caption}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+                    </Button.CommandParameter>
+                </Button>
+            </DockPanel>
+            <Canvas>
+                <Image Canvas.Left="27" Canvas.Top="20" Width="96" Height="96" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"
+                       Source="{Binding ShortcutImage}" ToolTip="{Binding FullPath}" MouseLeftButtonUp="{DXEvent 'Open()'}">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="Hand" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Button Canvas.Left="10" Canvas.Bottom="10" Width="130" Style="{StaticResource DrawerButton}" Content="{Binding Caption}" />
+            </Canvas>
+        </DockPanel>
+    </md:DrawerHost>
+</UserControl>

@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BAB015BC-103F-497E-9F52-F97E7A49101D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sidebar.Module.Dictionary</RootNamespace>
+    <AssemblyName>Sidebar.Module.Dictionary</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\DevExpress.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm">
+      <HintPath>..\Library\DevExpress.Mvvm.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.UI">
+      <HintPath>..\Library\DevExpress.Mvvm.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Xpo, Version=18.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\DevExpress.Xpo.dll</HintPath>
+    </Reference>
+    <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Gma.System.MouseKeyHook.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignColors">
+      <HintPath>..\Library\MaterialDesignColors.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf">
+      <HintPath>..\Library\MaterialDesignThemes.Wpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Converters.cs" />
+    <Compile Include="DictionaryView.xaml.cs">
+      <DependentUpon>DictionaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DictionaryViewModel.cs" />
+    <Compile Include="Global\GlobalTextSelection.cs" />
+    <Compile Include="Model\DictionaryEntity.cs" />
+    <Compile Include="Model\DictionaryManager.cs" />
+    <Compile Include="Model\Extensions.cs" />
+    <Compile Include="Model\SearchResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Yandex\Language.cs" />
+    <Compile Include="Yandex\LanguagePair.cs" />
+    <Compile Include="Yandex\Model\DictionaryResult.cs" />
+    <Compile Include="Yandex\Model\SpellResult.cs" />
+    <Compile Include="Yandex\Model\TranslationResult.cs" />
+    <Compile Include="Yandex\YandexService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.tr.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DictionaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sidebar.Common\Sidebar.Common.csproj">
+      <Project>{fb3f4a70-02e9-4896-90ad-6e39397683b1}</Project>
+      <Name>Sidebar.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Dictionary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Languages\de.png" />
+    <Resource Include="Assets\Languages\en.png" />
+    <Resource Include="Assets\Languages\es.png" />
+    <Resource Include="Assets\Languages\fr.png" />
+    <Resource Include="Assets\Languages\it.png" />
+    <Resource Include="Assets\Languages\tr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Background.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Library\DevExpress.Data.dll" />
+    <Content Include="Library\DevExpress.Xpo.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Modules\"
+xcopy /y "$(TargetDir)tr\*.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\tr\"
+
+xcopy /y "$(TargetDir)Devexpress.Data.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
+xcopy /y "$(TargetDir)Devexpress.Xpo.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
+xcopy /y "$(TargetDir)Gma.System.MouseKeyHook.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
+xcopy /y "$(TargetDir)SQLite.Interop.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
+xcopy /y "$(TargetDir)System.Data.SQLite.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

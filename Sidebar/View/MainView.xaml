@@ -1,0 +1,362 @@
+﻿<Window x:Class="Sidebar.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
+        xmlns:dxwuii="http://schemas.devexpress.com/winfx/2008/xaml/windowsui/internal"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxcop="clr-namespace:DevExpress.Xpf.Controls.Primitives;assembly=DevExpress.Xpf.Controls.v18.2"
+        xmlns:settings="clr-namespace:Sidebar.Properties"
+        xmlns:viewmodel="clr-namespace:Sidebar.ViewModel"
+        Topmost="{Binding AlwaysOnTop, Source={x:Static settings:Settings.Default}}"
+        ShowInTaskbar="{Binding ShowInTaskbar, Source={x:Static settings:Settings.Default}}"
+        DataContext="{dxmvvm:ViewModelSource Type=viewmodel:MainViewModel}"
+        Top="{Binding Top}" Left="{Binding Left}" Width="{Binding Width}" Height="{Binding Height}"
+        Title="Sidebar" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent"
+        Initialized="{DXEvent 'Initialize()'}" Closing="{DXEvent 'BeforeClose()'}" Drop="{DXEvent 'DragDrop(@args.Data)'}">
+
+    <Window.Resources>
+        <dxmvvm:ObjectToObjectConverter x:Key="LanguageImageConverter">
+            <dxmvvm:MapItem Source="en" Target="/Assets/English.png" />
+            <dxmvvm:MapItem Source="tr" Target="/Assets/Turkish.png" />
+        </dxmvvm:ObjectToObjectConverter>
+        <dxmvvm:ObjectToObjectConverter x:Key="TileSizeConverter">
+            <dxmvvm:MapItem Source="Small" Target="Small" />
+            <dxmvvm:MapItem Source="Large" Target="Large" />
+            <dxmvvm:MapItem Source="ExtraLarge" Target="ExtraLarge" />
+        </dxmvvm:ObjectToObjectConverter>
+        <Style x:Key="FlatButton" TargetType="Button">
+            <Setter Property="Visibility" Value="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={dxmvvm:BooleanToVisibilityConverter}}" />
+            <Setter Property="FontFamily" Value="/Sidebar.Common;component/Assets/Fonts/#FontAwesome" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse Width="16" Height="16" Fill="{DynamicResource MaterialDesignPaper}" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource SecondaryAccentBrush}" />
+                                <Setter Property="Cursor" Value="Hand" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="FontSize" Value="18" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource FlatButton}">
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ToggleListBoxItem" TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignToolToggleListBoxItem}">
+            <Setter Property="FontSize" Value="20" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="dxwui:PageView">
+            <Style.Resources>
+                <Style TargetType="dxwuii:NavigationHeaderControl">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Style>
+                <Style TargetType="dxcop:ScrollableControl">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="dxlc:TileLayoutControl">
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="AllowDrop" Value="True" />
+            <Setter Property="ScrollBars" Value="None" />
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="AllowAddFlowBreaksDuringItemMoving" Value="False" />
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Grid x:Name="Grid">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <Trigger Property="Visibility" Value="Visible">
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                        </Trigger>
+                                        <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.5" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                            <Button Content="" Margin="-9" Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                                    Style="{StaticResource ToolButton}" Visibility="{Binding IsMouseOver, ElementName=Grid, Converter={dxmvvm:BooleanToVisibilityConverter}}"
+                                    ToolTip="{Binding DataContext.ResourceProvider.Data.Remove, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
+                                    Command="{Binding DataContext.RemoveModuleCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                            <dxlc:Tile Content="{Binding Module}" />
+                        </Grid>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="dxlc:Tile">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Size" Value="{Binding Module.Size, Converter={StaticResource TileSizeConverter}}" />
+        </Style>
+        <DataTemplate x:Key="SwatchComboBoxItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="20" Height="20" Fill="{Binding ExemplarHue.Color, Mode=OneTime, Converter={dxmvvm:ColorToBrushConverter}}" />
+                <Label Margin="3,0,0,3" Content="{Binding Name}" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:CurrentWindowService />
+        <dxmvvm:NotificationService ApplicationId="Sidebar" Sound="Notification_Default" PredefinedNotificationTemplate="ShortHeaderAndLongText" />
+    </dxmvvm:Interaction.Behaviors>
+
+    <Grid>
+        <Grid.Style>
+            <Style>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsCollapsed, Source={x:Static settings:Settings.Default}}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="330,0,0,0" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.EnterActions>
+                        <DataTrigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" From="330,0,0,0" To="0,0,0,0" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.ExitActions>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Canvas Grid.Column="0" VerticalAlignment="Center" Width="30" Height="120">
+            <Path Fill="{DynamicResource MaterialDesignPaper}" Data="M0,30 L0,90 L30,120 L30,0 Z" />
+            <StackPanel Canvas.Top="30">
+                <Button Width="30" Height="30" Content="" Command="{Binding ExitCommand}" Style="{StaticResource FlatButton}"
+                        ToolTip="{Binding ResourceProvider.Data.Exit}" />
+                <Button Width="30" Height="30" Command="{Binding ExpandCollapseCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource FlatButton}">
+                            <Setter Property="Content" Value="" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsCollapsed, Source={x:Static settings:Settings.Default}}" Value="True">
+                                    <Setter Property="Content" Value="" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Canvas>
+        <DockPanel Grid.Column="1" Width="355" Background="{DynamicResource MaterialDesignPaper}">
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                <ListBox Margin="10" HorizontalAlignment="Left" SelectedIndex="{Binding SelectedPageIndex}" Style="{DynamicResource MaterialDesignToolToggleListBox}">
+                    <ListBoxItem Content="1" Style="{StaticResource ToggleListBoxItem}" />
+                    <ListBoxItem Content="2" Style="{StaticResource ToggleListBoxItem}" />
+                    <ListBoxItem Content="3" Style="{StaticResource ToggleListBoxItem}" />
+                    <ListBoxItem Content="4" Style="{StaticResource ToggleListBoxItem}" />
+                    <ListBoxItem Content="5" Style="{StaticResource ToggleListBoxItem}" />
+                    <ListBoxItem Content="" Style="{StaticResource ToggleListBoxItem}" FontFamily="/Sidebar.Common;component/Assets/Fonts/#FontAwesome" />
+                </ListBox>
+                <md:PopupBox HorizontalAlignment="Left" Style="{DynamicResource MaterialDesignMultiFloatingActionPopupBox}">
+                    <ItemsControl ItemsSource="{Binding Modules}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Width="32" Height="32" ToolTip="{Binding Module.DisplayName}" CommandParameter="{Binding Module}"
+                                            Command="{Binding DataContext.AddModuleCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Image Width="32" Height="32" Source="{Binding Module.Icon}" />
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </md:PopupBox>
+            </StackPanel>
+            <md:DialogHost Identifier="RootDialog" DialogTheme="Inherit" CloseOnClickAway="True">
+                <dxwui:PageView AnimationType="SlideHorizontal" PageHeadersAlignment="Bottom" Width="355" Padding="10" Background="{DynamicResource MaterialDesignPaper}"
+                            SelectedIndex="{Binding SelectedPageIndex}">
+                    <dxwui:PageView.Items>
+                        <dxwui:PageViewItem Header="1">
+                            <dxlc:TileLayoutControl ItemsSource="{Binding PageCollection.Pages[0].Modules}" />
+                        </dxwui:PageViewItem>
+                        <dxwui:PageViewItem Header="2">
+                            <dxlc:TileLayoutControl ItemsSource="{Binding PageCollection.Pages[1].Modules}" />
+                        </dxwui:PageViewItem>
+                        <dxwui:PageViewItem Header="3">
+                            <dxlc:TileLayoutControl ItemsSource="{Binding PageCollection.Pages[2].Modules}" />
+                        </dxwui:PageViewItem>
+                        <dxwui:PageViewItem Header="4">
+                            <dxlc:TileLayoutControl ItemsSource="{Binding PageCollection.Pages[3].Modules}" />
+                        </dxwui:PageViewItem>
+                        <dxwui:PageViewItem Header="5">
+                            <dxlc:TileLayoutControl ItemsSource="{Binding PageCollection.Pages[4].Modules}" />
+                        </dxwui:PageViewItem>
+                        <dxwui:PageViewItem Header="" FontFamily="/Sidebar.Common;component/Assets/Fonts/#FontAwesome">
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignGroupBox}">
+                                        <Setter Property="Width" Value="310" />
+                                        <Setter Property="Margin" Value="10,10,10,0" />
+                                        <Setter Property="HorizontalAlignment" Value="Left" />
+                                    </Style>
+                                </StackPanel.Resources>
+                                <GroupBox Header="{Binding ResourceProvider.Data.View}">
+                                    <StackPanel>
+                                        <StackPanel Height="40" Orientation="Horizontal">
+                                            <Label VerticalAlignment="Center" Content="{Binding ResourceProvider.Data.Light}" />
+                                            <ToggleButton Margin="10,0" IsChecked="{Binding DarkView, Source={x:Static settings:Settings.Default}}"
+                                                          Command="{DXCommand 'PaletteHelper.SetLightDark(@Self.IsChecked)'}" />
+                                            <Label VerticalAlignment="Center" Content="{Binding ResourceProvider.Data.Dark}" />
+                                        </StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="150" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="45" />
+                                                <RowDefinition Height="45" />
+                                            </Grid.RowDefinitions>
+                                            <Label VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Content="{Binding ResourceProvider.Data.PrimaryColor}" />
+                                            <Label VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Content="{Binding ResourceProvider.Data.AccentColor}" />
+                                            <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding SwatchesProvider.Swatches}" ItemTemplate="{StaticResource SwatchComboBoxItemTemplate}"
+                                                      SelectedValue="{Binding  PrimaryColor, Source={x:Static settings:Settings.Default}}" SelectedValuePath="Name"
+                                                      SelectionChanged="{DXEvent 'PaletteHelper.ReplacePrimaryColor(@Self.SelectedItem)'}" />
+                                            <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SwatchesProvider.Swatches}" ItemTemplate="{StaticResource SwatchComboBoxItemTemplate}"
+                                                      SelectedValue="{Binding  AccentColor, Source={x:Static settings:Settings.Default}}" SelectedValuePath="Name"
+                                                      SelectionChanged="{DXEvent 'PaletteHelper.ReplaceAccentColor(@Self.SelectedItem)'}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="{Binding ResourceProvider.Data.Language}">
+                                    <ListBox IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Languages}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <RadioButton VerticalAlignment="Center" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
+                                                    <Image Margin="10,0" Source="{Binding Name, Converter={StaticResource LanguageImageConverter}}" />
+                                                    <TextBlock Text="{Binding NativeName}" VerticalAlignment="Center" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </GroupBox>
+                                <GroupBox Header="{Binding ResourceProvider.Data.Preferences}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="40" />
+                                        </Grid.RowDefinitions>
+                                        <Label VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Content="{Binding ResourceProvider.Data.AddToStartup}" />
+                                        <Label VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Content="{Binding ResourceProvider.Data.AlwaysOnTop}" />
+                                        <Label VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Content="{Binding ResourceProvider.Data.ShowInTaskbar}" />
+                                        <ToggleButton Grid.Column="1" Grid.Row="0" IsChecked="{Binding AddToStartup, Source={x:Static settings:Settings.Default}}" />
+                                        <ToggleButton Grid.Column="1" Grid.Row="1" IsChecked="{Binding AlwaysOnTop, Source={x:Static settings:Settings.Default}}" />
+                                        <ToggleButton Grid.Column="1" Grid.Row="2" IsChecked="{Binding ShowInTaskbar, Source={x:Static settings:Settings.Default}}" />
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Height="400" Header="{Binding ResourceProvider.Data.Extensions}">
+                                    <md:DialogHost DialogTheme="Inherit" CloseOnClickAway="True">
+                                        <ListBox x:Name="ListBox" ItemsSource="{Binding Modules}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Margin="10,0" Width="32" Height="32" Source="{Binding Module.Icon}" />
+                                                        <TextBlock Text="{Binding Module.DisplayName}" VerticalAlignment="Center" />
+                                                        <Button Margin="10,0" Content="" Style="{StaticResource FlatButton}" Command="{x:Static md:DialogHost.OpenDialogCommand}"
+                                                            Visibility="{Binding IsMouseOver, ElementName=ListBox, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+                                                            <Button.CommandParameter>
+                                                                <StackPanel Background="{DynamicResource MaterialDesignPaper}">
+                                                                    <StackPanel Margin="10" Orientation="Horizontal">
+                                                                        <Image VerticalAlignment="Center" Width="32" Height="32" Source="{Binding Module.Icon}" />
+                                                                        <StackPanel>
+                                                                            <TextBlock Margin="5">
+                                                                                <Run Text="{Binding Module.DisplayName, Mode=OneWay}" />
+                                                                                <Run Text="{Binding AssemblyVersion, Mode=OneWay}" />
+                                                                            </TextBlock>
+                                                                            <TextBlock Margin="5" Text="{Binding AssemblyName, StringFormat={}{0}.dll}" />
+                                                                        </StackPanel>
+                                                                    </StackPanel>
+                                                                    <Button Content="OK" Command="{x:Static md:DialogHost.CloseDialogCommand}" HorizontalAlignment="Right" 
+                                                                            Style="{DynamicResource MaterialDesignFlatButton}" />
+                                                                </StackPanel>
+                                                            </Button.CommandParameter>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </md:DialogHost>
+                                </GroupBox>
+                            </StackPanel>
+                        </dxwui:PageViewItem>
+                    </dxwui:PageView.Items>
+                </dxwui:PageView>
+            </md:DialogHost>
+        </DockPanel>
+        <tb:TaskbarIcon IconSource="/Assets/NotifyIcon.ico" LeftClickCommand="{Binding BringToFrontCommand}" DoubleClickCommand="{Binding BringToFrontCommand}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{Binding ResourceProvider.Data.Exit}" Command="{Binding ExitCommand}" />
+                    <MenuItem Header="{Binding ResourceProvider.Data.BringToFront}" Command="{Binding BringToFrontCommand}" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+    </Grid>
+
+</Window>

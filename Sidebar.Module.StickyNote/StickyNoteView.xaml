@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="Sidebar.Module.StickyNote.StickyNoteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+
+    <UserControl.Resources>
+        <dxmvvm:ObjectToObjectConverter x:Key="HeaderBrushConverter">
+            <dxmvvm:MapItem Source="Yellow">
+                <dxmvvm:MapItem.Target>
+                    <SolidColorBrush Color="#F8F7B6" />
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+            <dxmvvm:MapItem Source="Green">
+                <dxmvvm:MapItem.Target>
+                    <SolidColorBrush Color="#C5F7C1" />
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+            <dxmvvm:MapItem Source="Blue">
+                <dxmvvm:MapItem.Target>
+                    <SolidColorBrush Color="#C9ECF8" />
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+            <dxmvvm:MapItem Source="Red">
+                <dxmvvm:MapItem.Target>
+                    <SolidColorBrush Color="#FF9999" />
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+        </dxmvvm:ObjectToObjectConverter>
+        <dxmvvm:ObjectToObjectConverter x:Key="ContentBrushConverter">
+            <dxmvvm:MapItem Source="Yellow">
+                <dxmvvm:MapItem.Target>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Color="#FDFDCB" Offset="0.0" />
+                        <GradientStop Color="#FCF9A1" Offset="1.0" />
+                    </LinearGradientBrush>
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+            <dxmvvm:MapItem Source="Green">
+                <dxmvvm:MapItem.Target>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Color="#D2FFCC" Offset="0.0" />
+                        <GradientStop Color="#B1E8AE" Offset="1.0" />
+                    </LinearGradientBrush>
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+            <dxmvvm:MapItem Source="Blue">
+                <dxmvvm:MapItem.Target>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Color="#D9F3FB" Offset="0.0" />
+                        <GradientStop Color="#B8DBF4" Offset="1.0" />
+                    </LinearGradientBrush>
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+            <dxmvvm:MapItem Source="Red">
+                <dxmvvm:MapItem.Target>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Color="#FFB3B3" Offset="0.0" />
+                        <GradientStop Color="#FF9999" Offset="1.0" />
+                    </LinearGradientBrush>
+                </dxmvvm:MapItem.Target>
+            </dxmvvm:MapItem>
+        </dxmvvm:ObjectToObjectConverter>
+        <Style x:Key="ColorButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+            <Setter Property="Margin" Value="0,0,10,0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Command" Value="{Binding ChangeColorCommand}" />
+            <Setter Property="Background" Value="{Binding CommandParameter, RelativeSource={RelativeSource Self}, Converter={StaticResource ContentBrushConverter}}" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Width" Value="20" />
+            <Setter Property="md:ShadowAssist.ShadowEdges" Value="Bottom,Right" />
+            <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth2" />
+            <Setter Property="md:ShadowAssist.Darken" Value="True" />
+        </Style>
+    </UserControl.Resources>
+    
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Background="{Binding Color, Converter={StaticResource HeaderBrushConverter}}" Height="30" Width="310">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button CommandParameter="Yellow" Style="{StaticResource ColorButton}" />
+                <Button CommandParameter="Green" Style="{StaticResource ColorButton}" />
+                <Button CommandParameter="Blue" Style="{StaticResource ColorButton}" />
+                <Button CommandParameter="Red" Style="{StaticResource ColorButton}" />
+            </StackPanel>
+        </DockPanel>
+        <TextBox Height="280" Width="310" VerticalContentAlignment="Top" FontFamily="Segoe Print" FontSize="16" 
+                 Foreground="Black" CaretBrush="Black" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" 
+                 AcceptsTab="True" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" 
+                 Background="{Binding Color, Converter={StaticResource ContentBrushConverter}}" />
+    </DockPanel>
+
+</UserControl>
