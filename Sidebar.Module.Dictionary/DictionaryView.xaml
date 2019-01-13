@@ -99,8 +99,8 @@
                     </Style.Triggers>
                 </Style>
             </DockPanel.Style>
-            <md:ColorZone Mode="Standard" CornerRadius="5" md:ShadowAssist.ShadowDepth="Depth2" Padding="10,0"
-                          DockPanel.Dock="Top" Height="40" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <md:ColorZone DockPanel.Dock="Top" Mode="Standard" CornerRadius="5" md:ShadowAssist.ShadowDepth="Depth2" 
+                          Padding="10,0" Height="40" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
                 <DockPanel>
                     <ComboBox DockPanel.Dock="Left" Height="30" Width="100" SelectedValuePath="NativeName" ItemTemplate="{StaticResource LanguageItemTemplate}"
                               ItemsSource="{Binding SupportedLanguages}" SelectedItem="{Binding InputCulture}" />
@@ -112,12 +112,16 @@
                               ItemsSource="{Binding SupportedLanguages}" SelectedItem="{Binding OutputCulture}" />
                 </DockPanel>
             </md:ColorZone>
-            <md:ColorZone Mode="Standard" CornerRadius="5" md:ShadowAssist.ShadowDepth="Depth2"
-                          DockPanel.Dock="Bottom" Height="40" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <md:ColorZone DockPanel.Dock="Bottom" Mode="Standard" CornerRadius="5" md:ShadowAssist.ShadowDepth="Depth2"
+                          Height="40" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
                 <DockPanel>
                     <Button DockPanel.Dock="Left" Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
                             Command="{Binding SearchCommand}" ToolTip="{Binding ResourceProvider.Data.Search}">
                         <md:PackIcon Kind="Magnify" Height="20" Width="20" />
+                    </Button>
+                    <Button DockPanel.Dock="Right" Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                            Command="{x:Static md:DrawerHost.OpenDrawerCommand}" ToolTip="{Binding ResourceProvider.Data.Settings}">
+                        <md:PackIcon Kind="Settings" Height="20" Width="20" />
                     </Button>
                     <Button DockPanel.Dock="Right" Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
                             Command="{Binding ClearCommand}" ToolTip="{Binding ResourceProvider.Data.Clear}"
@@ -132,25 +136,12 @@
                     </TextBox>
                 </DockPanel>
             </md:ColorZone>
-            <Grid>
-                <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Panel.ZIndex="1" 
-                        Content="{Binding ResourceProvider.Data.Settings}" Command="{x:Static md:DrawerHost.OpenDrawerCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <ListBox Margin="0,5" ItemsSource="{Binding SearchResults}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding Word, Converter={dxmvvm:StringToVisibilityConverter}}">
-                                    <TextBlock TextWrapping="Wrap">
+            <ListBox Margin="0,5" ItemsSource="{Binding SearchResults}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Word, Converter={dxmvvm:StringToVisibilityConverter}}">
+                                <TextBlock TextWrapping="Wrap">
                                         <Run Text="{Binding Word}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryHueMidBrush}" />
                                         <Run Text="{Binding WordClass, StringFormat='({0})'}" FontStyle="Italic" />
                                         <Run FontStyle="Italic">
@@ -160,16 +151,15 @@
                                                 </PriorityBinding>
                                             </Run.Text>
                                         </Run>
-                                    </TextBlock>
-                                    <Button Margin="5,0,0,0" Content="&#xf028;" VerticalAlignment="Bottom" FontSize="16" Style="{StaticResource FlatButton}" CommandParameter="{Binding Word}"
-                                            Command="{Binding DataContext.PronounceCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                                </StackPanel>
-                                <TextBlock Margin="10,5,0,0" TextWrapping="Wrap" Text="{Binding Definition}" />
+                                </TextBlock>
+                                <Button Margin="5,0,0,0" Content="&#xf028;" VerticalAlignment="Bottom" FontSize="16" Style="{StaticResource FlatButton}" CommandParameter="{Binding Word}"
+                                        Command="{Binding DataContext.PronounceCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                             </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
+                            <TextBlock Margin="10,5,0,0" TextWrapping="Wrap" Text="{Binding Definition}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </DockPanel>
     </md:DrawerHost>
 
