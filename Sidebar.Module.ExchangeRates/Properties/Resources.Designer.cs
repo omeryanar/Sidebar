@@ -97,6 +97,15 @@ namespace Sidebar.Module.ExchangeRates.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Turkish Lira.
         /// </summary>
         public static string TRY {

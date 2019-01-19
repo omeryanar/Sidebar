@@ -5,7 +5,7 @@
              xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:local="clr-namespace:Sidebar.Module.Dictionary"
              xmlns:behaviors="clr-namespace:Sidebar.Common.Behaviors;assembly=Sidebar.Common"
-             Background="{DynamicResource MaterialDesignPaper}" TextElement.Foreground="{DynamicResource MaterialDesignBody}" Loaded="{DXEvent 'Load()'}">
+             Background="{DynamicResource MaterialDesignPaper}" TextElement.Foreground="{DynamicResource MaterialDesignBody}">
 
     <UserControl.Resources>
         <local:LanguageImageConverter x:Key="LanguageImageConverter" />

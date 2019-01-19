@@ -29,8 +29,8 @@
                 </Style>
             </md:ColorZone.Style>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock VerticalAlignment="Center" Margin="0,0,20,0" Text="{Binding ResourceProvider.Data.BaseCurrency}" />
-                <ComboBox x:Name="BaseCurrencyCombo" VerticalAlignment="Center" Height="30" Width="130" SelectedValuePath="Key" SelectedValue="{Binding BaseCurrency}">
+                <TextBlock VerticalAlignment="Center" Text="{Binding ResourceProvider.Data.BaseCurrency}" />
+                <ComboBox x:Name="BaseCurrencyCombo" Margin="15,0" VerticalAlignment="Center" Height="30" Width="130" SelectedValuePath="Key" SelectedValue="{Binding BaseCurrency}">
                     <dxmvvm:Interaction.Behaviors>
                         <local:EnumItemSourceBehavior EnumType="{x:Type model:Currency}" />
                     </dxmvvm:Interaction.Behaviors>
@@ -44,6 +44,10 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <Button Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                        Command="{Binding RefreshCommand}" ToolTip="{Binding ResourceProvider.Data.Refresh}">
+                    <md:PackIcon Kind="Refresh" Height="20" Width="20" />
+                </Button>
             </StackPanel>
         </md:ColorZone>
         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">

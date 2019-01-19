@@ -137,6 +137,9 @@
   <ItemGroup>
     <Content Include="Library\DevExpress.Data.dll" />
     <Content Include="Library\DevExpress.Xpo.dll" />
+    <Content Include="Library\Gma.System.MouseKeyHook.dll" />
+    <Content Include="Library\SQLite.Interop.dll" />
+    <Content Include="Library\System.Data.SQLite.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

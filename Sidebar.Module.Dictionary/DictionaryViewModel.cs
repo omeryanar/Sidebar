@@ -71,6 +71,25 @@ namespace Sidebar.Module.Dictionary
 
         #region Events
 
+        protected void OnTrackTextSelectionsChanged()
+        {
+            if (TrackTextSelections)
+            {
+                GlobalTextSelection.Run();
+                GlobalTextSelection.SelectionChanged += GlobalTextSelection_SelectionChanged;
+
+                Mediator.Register(this, (RemoveModuleMessage message) =>
+                {
+                    if (this == message.Module)
+                        GlobalTextSelection.SelectionChanged -= GlobalTextSelection_SelectionChanged;
+                });
+            }
+            else
+            {
+                GlobalTextSelection.SelectionChanged -= GlobalTextSelection_SelectionChanged;
+            }
+        }
+
         protected void OnTrackedApplicationsChanged(string oldApplications)
         {
             if (oldApplications != null)
@@ -99,18 +118,6 @@ namespace Sidebar.Module.Dictionary
         #endregion
 
         #region Commands
-
-        public void Load()
-        {
-            GlobalTextSelection.Run();
-            GlobalTextSelection.SelectionChanged += GlobalTextSelection_SelectionChanged;
-
-            Mediator.Register(this, (RemoveModuleMessage message) =>
-            {
-                if (this == message.Module)
-                    GlobalTextSelection.SelectionChanged -= GlobalTextSelection_SelectionChanged;
-            });
-        }
 
         public void Swap()
         {

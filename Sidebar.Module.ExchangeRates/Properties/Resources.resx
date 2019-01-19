@@ -129,6 +129,9 @@
   <data name="GBP" xml:space="preserve">
     <value>British Pound</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
   <data name="TRY" xml:space="preserve">
     <value>Turkish Lira</value>
   </data>
