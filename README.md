@@ -48,7 +48,7 @@ Displays exchange rates of 4 currencies: USD, GBP, EURO and TL.
 ### Shortcut
 Creates shortcuts for common applications such as Microsoft Office. You can also create shortcut for any file or application by dragging and dropping into Sidebar.
 
-![Clock](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Clock/Clock.png?raw=true)
+![Shortcut](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Shortcut/Shortcut.png?raw=true)
 
 ### Sticky Notes
 Similar to Windows Sticky Notes application.
