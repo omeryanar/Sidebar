@@ -2,6 +2,8 @@
 
 Sidebar is a plugin-based windows application which displays gadget-like applications at the rigthmost of the screen. There are 8 built-in plugins and you can easily develop your own.
 
+![Sidebar](https://github.com/omeryanar/Resources/blob/master/Sidebar/Sidebar.png?raw=true)
+
 ## General Features
 
 Plugins can be of 3 different sizes:
