@@ -1,6 +1,6 @@
 # Sidebar
 
-Sidebar is a plugin-based windows application which displays gadget-like applications at the rigthmost of the screen. There are 8 built-in plugins and you can easily develop your own.
+Sidebar is a plugin-based windows application which displays gadget-like applications at the rightmost of the screen. There are 8 built-in plugins and you can easily develop your own.
 
 ![Sidebar](https://github.com/omeryanar/Resources/blob/master/Sidebar/Sidebar.png?raw=true)
 
@@ -64,7 +64,7 @@ Displays 3 days weather forecast.
 
 ## How to develop a plugin?
 
-* Create a class library project targeting **.NET Framewrok 4.5.2** or higher.
+* Create a class library project targeting **.NET Framework 4.5.2** or higher.
 * Add a reference to **Sidebar.Common.dll** assembly.
 * Implement **IModule** interface
 
@@ -118,10 +118,12 @@ SampleView.xaml
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="{DynamicResource MaterialDesignPaper}" Padding="10">
     <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="{Binding ResourceProvider.Data.Sample}" />
+        <TextBlock Text="{Binding ResourceProvider.Data.Sample}" />
     </Grid>
 </UserControl>
 ```
+
+> Note that **Text** property of **TextBlock** element is bound to **ResourceProvider.Data.** If language is changed at runtime, it is updated automatically.
 
 #### Sample Plugin View Model
 
@@ -161,3 +163,5 @@ public class SampleViewModel : IModule
     }
 }
 ```
+
+> Note that ViewModel class name equals to ViewName+Model and implements IModule interface. It is also marked with **[DataContract]** attribute. The value of any property marked with **[DataMember]** attribute is saved when application closes.
