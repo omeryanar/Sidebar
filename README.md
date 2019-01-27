@@ -12,29 +12,29 @@ Plugins can be of 3 different sizes:
 * Large: 310x150
 * Extra Large: 310x310
 
-These sizes are similar to windows tiles. You can rearrange them by drag-drop.
+These sizes are similar to windows tiles. You can rearrange them with drag and drop.
 
-Sidebar supports multi-language, English and Turkish are included. You can easily add other languages by translating resource files.
+Sidebar is a multilingual application, English and Turkish are included. You can easily add other languages by translating resource files.
 
 ## Built-in Plugins
 
 ### Calculator
-Calculator plugin.
+Simple calculator with history.
 
 ![Calculator](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Calculator/Calculator.png?raw=true)
 
 ### Calendar
-Calendar plugin.
+Displays current date.
 
 ![Calendar](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Calendar/Calendar.png?raw=true)
 
 ### Clock
-Digital Clock Plugin
+Displays current date and time.
 
 ![Clock](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Clock/Clock.png?raw=true)
 
 ### Dictionary
-Dictionary plugin can translate any selected text in any application and sends a toast notification. It supports 6 languages: English, Turkish, German, French, Spanish and Italian.
+Translates selected text in any application and sends a toast notification. It supports 6 languages: English, Turkish, German, French, Spanish and Italian.
 
 ![Dictionary](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Dictionary/Dictionary.png?raw=true)
 
@@ -48,16 +48,116 @@ Displays exchange rates of 4 currencies: USD, GBP, EURO and TL.
 ![Exchange Rates](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/ExchangeRates/ExchangeRates.png?raw=true)
 
 ### Shortcut
-Creates shortcuts for common applications such as Microsoft Office. You can also create shortcut for any file or application by dragging and dropping into Sidebar.
+Creates shortcuts for common applications such as Microsoft Office. You can also create a shortcut for any file or application by dragging and dropping it to Sidebar.
 
 ![Shortcut](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Shortcut/Shortcut.png?raw=true)
 
 ### Sticky Notes
-Similar to Windows Sticky Notes application.
+Creates sticky notes with 4 different background colors.
 
 ![Sticky Notes](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/StickyNotes/StickyNotes.png?raw=true)
 
 ### Weather
-Displays weather conditions
+Displays 3 days weather forecast.
 
 ![Weather](https://github.com/omeryanar/Resources/blob/master/Sidebar/Plugins/Weather/Weather.png?raw=true)
+
+## How to develop a plugin?
+
+* Create a class library project targeting **.NET Framewrok 4.5.2** or higher.
+* Add a reference to **Sidebar.Common.dll** assembly.
+* Implement **IModule** interface
+
+```csharp
+public interface IModule
+{
+    // Module Name
+    string DisplayName { get; }
+
+    // Module Icon
+    ImageSource Icon { get; }
+
+    // Module Size: Small (150x150), Large (310x150), ExtraLarge (310x310)
+    ModuleSize Size { get; }
+
+    // Create an instance
+    IModule Create();
+}
+```
+
+That's it! After building the project, move the assembly to *Modules* folder and restart Sidebar.exe.
+Or, simply download Sidebar Module Project Template:
+
+https://github.com/omeryanar/Resources/blob/master/Sidebar/Sidebar.Module.Sample.zip?raw=true
+
+### Remarks
+
+* Sidebar plugins are developed by using MVVM framework. ViewModels implements *IModule* interface and their names ends with *ViewName*Model. For example: **SampleView** and **SampleViewModel**
+
+* ViewModels are serializable and marked with **[DataContract]** attribute. Properties marked with **[DataMember]** attribute are saved automatically.
+
+* Assembly names starts with Sidebar.Module.*PluginName*. For example: **Sidebar.Module.Sample.dll**
+
+* **ResourceProvider** class helps you develop a multilingual plugin. It updates resources if language is changed at runtime.
+
+* **Mediator** class helps you interact with the main application and other plugins. For example, you can send a **NotificationMessage** to show a toast notification.
+
+* It is recommended to use **Material Design** for a compatible look and feel.
+https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit
+
+* It is recommended to use **DevExpress MVVM Framework** for easy development.  
+https://github.com/DevExpress/DevExpress.Mvvm.Free
+
+#### Sample Plugin View
+
+SampleView.xaml
+
+```XML
+<UserControl x:Class="Sidebar.Module.Sample.SampleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource MaterialDesignPaper}" Padding="10">
+    <Grid>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="{Binding ResourceProvider.Data.Sample}" />
+    </Grid>
+</UserControl>
+```
+
+#### Sample Plugin View Model
+
+SampleViewModel.cs
+
+```csharp
+[DataContract]
+public class SampleViewModel : IModule
+{
+    #region IModule
+
+    public ImageSource Icon { get; private set; }
+
+    public string DisplayName
+    {
+        get { return Properties.Resources.Sample; }
+    }
+
+    public ModuleSize Size
+    {
+        get { return ModuleSize.Small; }
+    }
+
+    public IModule Create()
+    {
+        return ViewModelSource.Create<SampleViewModel>();
+    }
+
+    #endregion
+
+    public virtual ResourceProvider ResourceProvider { get; set; }
+
+    public SampleViewModel()
+    {
+        Icon = new BitmapImage(new Uri("pack://application:,,,/Sidebar.Module.Sample;component/Assets/Sample.png"));
+        ResourceProvider = new ResourceProvider(new Properties.Resources());
+    }
+}
+```
