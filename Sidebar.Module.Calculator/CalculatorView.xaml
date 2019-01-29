@@ -1,26 +1,31 @@
 ﻿<UserControl x:Class="Sidebar.Module.Calculator.CalculatorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
-             Background="{DynamicResource MaterialDesignPaper}" Padding="20,0">
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             Background="{DynamicResource MaterialDesignPaper}" Focusable="True" Padding="20,0">
 
     <UserControl.Resources>
         <Style x:Key="DigitButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+            <Setter Property="Focusable" Value="False" />
             <Setter Property="Command" Value="{Binding DigitButtonPressCommand}" />
             <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
             <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
         </Style>
         <Style x:Key="DigitButtonAccentStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+            <Setter Property="Focusable" Value="False" />
             <Setter Property="Command" Value="{Binding DigitButtonPressCommand}" />
             <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
             <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
         </Style>
         <Style x:Key="OperationButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+            <Setter Property="Focusable" Value="False" />
             <Setter Property="Command" Value="{Binding OperationButtonPressCommand}" />
             <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
             <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
         </Style>
         <Style x:Key="SingularOperationButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+            <Setter Property="Focusable" Value="False" />
             <Setter Property="Command" Value="{Binding SingularOperationButtonPressCommand}" />
             <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
             <Setter Property="md:ShadowAssist.ShadowDepth" Value="Depth3" />
@@ -163,7 +168,11 @@
             <Button Grid.Row="2" Grid.Column="4" Style="{StaticResource SingularOperationButtonStyle}" Content="√" />
             <Button Grid.Row="3" Grid.Column="4" Style="{StaticResource SingularOperationButtonStyle}" Content="%" />
             <Button Grid.Row="4" Grid.Column="4" Style="{StaticResource SingularOperationButtonStyle}" Content="1/x" />
-            <Button Grid.Row="5" Grid.Column="4" Style="{StaticResource OperationButtonStyle}" Content="=" />
+            <Button Grid.Row="5" Grid.Column="4" Style="{StaticResource OperationButtonStyle}" Content="=" Focusable="True">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:FocusBehavior />
+                </dxmvvm:Interaction.Behaviors>
+            </Button>
 
         </Grid>
     </md:DrawerHost>

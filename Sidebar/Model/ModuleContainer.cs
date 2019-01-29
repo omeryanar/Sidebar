@@ -58,13 +58,13 @@ namespace Sidebar.Model
             }
         }
 
-        public int GetEmptySpace()
+        public int GetEmptySpace(int height)
         {
             int emptySpace = 0;
             foreach (ModuleContainer container in Modules)
                 emptySpace += (int)container.Module.Size;
 
-            return 12 - emptySpace;
+            return ((height - 140) / 75) - emptySpace;
         }
 
         public ModulePage()

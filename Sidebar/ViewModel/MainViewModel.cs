@@ -140,7 +140,7 @@ namespace Sidebar.ViewModel
         {
             if (SelectedPageIndex < 0 || SelectedPageIndex >= ModulePageCollection.PageCount)
                 return false;
-            if (CurrentPage.GetEmptySpace() < (int)module.Size)
+            if (CurrentPage.GetEmptySpace((int)Height) < (int)module.Size)
                 return false;
 
             return true;
