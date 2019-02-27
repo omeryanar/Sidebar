@@ -82,7 +82,9 @@ namespace Sidebar.Module.ExchangeRates
 
         public async void Refresh()
         {
-            ExchangeRates = await ExchangeRateService.GetExchangeRates(BaseCurrency);
+            Exchange exchangeRates = await ExchangeRateService.GetExchangeRates(BaseCurrency);
+            if (exchangeRates != null)
+                ExchangeRates = exchangeRates;
         }
 
         public ExchangeRatesViewModel()

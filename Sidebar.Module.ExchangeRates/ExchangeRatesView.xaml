@@ -46,7 +46,7 @@
                 </ComboBox>
                 <Button Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
                         Command="{Binding RefreshCommand}" ToolTip="{Binding ResourceProvider.Data.Refresh}">
-                    <md:PackIcon Kind="Refresh" Height="20" Width="20" />
+                    <md:PackIcon Kind="Autorenew" Height="20" Width="20" />
                 </Button>
             </StackPanel>
         </md:ColorZone>

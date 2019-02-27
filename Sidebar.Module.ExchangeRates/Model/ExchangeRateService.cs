@@ -12,26 +12,26 @@ namespace Sidebar.Module.ExchangeRates.Model
             string requestUrl = String.Format(UrlFormat, apiKey);
 
             Exchange exchange = await HttpService.GetSerializedObject<Exchange>(requestUrl);
-            if (exchange == null)
-                return new Exchange();
-
-            switch (baseCurrency)
+            if (exchange != null && exchange.Rates != null)
             {
-                case Currency.TRY:
-                    exchange.Rates.Usd = exchange.Rates.Try / exchange.Rates.Usd;
-                    exchange.Rates.Eur = exchange.Rates.Try;
-                    exchange.Rates.Gbp = exchange.Rates.Try / exchange.Rates.Gbp;
-                    break;
-                case Currency.USD:
-                    exchange.Rates.Try = exchange.Rates.Usd / exchange.Rates.Try;
-                    exchange.Rates.Eur = exchange.Rates.Usd;
-                    exchange.Rates.Gbp = exchange.Rates.Usd / exchange.Rates.Gbp;
-                    break;
-                case Currency.GBP:
-                    exchange.Rates.Try = exchange.Rates.Gbp / exchange.Rates.Try;
-                    exchange.Rates.Usd = exchange.Rates.Gbp / exchange.Rates.Usd;
-                    exchange.Rates.Eur = exchange.Rates.Gbp;
-                    break;
+                switch (baseCurrency)
+                {
+                    case Currency.TRY:
+                        exchange.Rates.Usd = exchange.Rates.Try / exchange.Rates.Usd;
+                        exchange.Rates.Eur = exchange.Rates.Try;
+                        exchange.Rates.Gbp = exchange.Rates.Try / exchange.Rates.Gbp;
+                        break;
+                    case Currency.USD:
+                        exchange.Rates.Try = exchange.Rates.Usd / exchange.Rates.Try;
+                        exchange.Rates.Eur = exchange.Rates.Usd;
+                        exchange.Rates.Gbp = exchange.Rates.Usd / exchange.Rates.Gbp;
+                        break;
+                    case Currency.GBP:
+                        exchange.Rates.Try = exchange.Rates.Gbp / exchange.Rates.Try;
+                        exchange.Rates.Usd = exchange.Rates.Gbp / exchange.Rates.Usd;
+                        exchange.Rates.Eur = exchange.Rates.Gbp;
+                        break;
+                }
             }
 
             return exchange;

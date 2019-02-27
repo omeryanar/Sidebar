@@ -3,7 +3,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Cache;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 
@@ -37,12 +36,9 @@ namespace Sidebar.Common
             try
             {
                 WebRequest request = WebRequest.Create(url);
-                request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable);
-
                 WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
-                Stream stream = response.GetResponseStream();
 
-                return stream;
+                return response.GetResponseStream();
             }
             catch (Exception ex)
             {
