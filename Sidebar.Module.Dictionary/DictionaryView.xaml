@@ -123,12 +123,15 @@
                             Command="{x:Static md:DrawerHost.OpenDrawerCommand}" ToolTip="{Binding ResourceProvider.Data.Settings}">
                         <md:PackIcon Kind="Settings" Height="20" Width="20" />
                     </Button>
-                    <Button DockPanel.Dock="Right" Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                    <Button x:Name="ClearButton" DockPanel.Dock="Right" Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
                             Command="{Binding ClearCommand}" ToolTip="{Binding ResourceProvider.Data.Clear}"
                             Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={dxmvvm:BooleanToVisibilityConverter}}">
                         <md:PackIcon Kind="Close" Height="20" Width="20" />
                     </Button>
                     <TextBox VerticalAlignment="Center" Text="{Binding Word, UpdateSourceTrigger=PropertyChanged}" md:HintAssist.Hint="{Binding ResourceProvider.Data.Search}">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxmvvm:FocusBehavior SourceName="ClearButton" EventName="Click"/>
+                        </dxmvvm:Interaction.Behaviors>
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
                             <KeyBinding Key="Esc" Command="{Binding ClearCommand}" />

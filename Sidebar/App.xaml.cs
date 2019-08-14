@@ -32,6 +32,13 @@ namespace Sidebar
             ApplicationThemeHelper.ApplicationThemeName = "DeepBlue";
         }
 
+        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+        {
+            base.OnSessionEnding(e);
+
+            Shutdown();
+        }
+
         #region Journal
 
         private void Dispatcher_ShutdownStarted(object sender, EventArgs e)

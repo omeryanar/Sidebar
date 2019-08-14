@@ -67,7 +67,7 @@
             <Image Width="140" Height="96" Source="/Sidebar.Module.Weather;component/Assets/WeatherIcons/803d.png" />
             <Image Width="140" Height="96" Source="/Sidebar.Module.Weather;component/Assets/WeatherIcons/803n.png" />
             <Image Width="140" Height="96" Source="/Sidebar.Module.Weather;component/Assets/WeatherIcons/905n.png" />
-        </WrapPanel>       
+        </WrapPanel>
         <StackPanel DockPanel.Dock="Top">
             <ListBox HorizontalAlignment="Center" SelectedIndex="{Binding SelectedPageIndex}" SelectionChanged="{DXEvent 'Reset()'}"
                      ItemsSource="{Binding Forecast}" ItemTemplate="{StaticResource ForecastHeaderTemplate}" Style="{DynamicResource MaterialDesignToolToggleListBox}">
@@ -84,12 +84,15 @@
                         Command="{Binding SearchCommand}" ToolTip="{Binding ResourceProvider.Data.Search}">
                     <md:PackIcon Kind="Magnify" Height="20" Width="20" />
                 </Button>
-                <Button DockPanel.Dock="Right" Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                <Button x:Name="ClearButton" DockPanel.Dock="Right" Padding="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignToolForegroundButton}"
                         Command="{Binding ClearCommand}" ToolTip="{Binding ResourceProvider.Data.Clear}"
                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={dxmvvm:BooleanToVisibilityConverter}}">
                     <md:PackIcon Kind="Close" Height="20" Width="20" />
                 </Button>
                 <TextBox VerticalAlignment="Center" Text="{Binding DisplayText, UpdateSourceTrigger=PropertyChanged}" md:HintAssist.Hint="{Binding ResourceProvider.Data.Search}">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:FocusBehavior SourceName="ClearButton" EventName="Click"/>
+                    </dxmvvm:Interaction.Behaviors>
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
                         <KeyBinding Key="Esc" Command="{Binding ResetCommand}" />

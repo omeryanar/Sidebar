@@ -7,7 +7,7 @@
         xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
         xmlns:dxwuii="http://schemas.devexpress.com/winfx/2008/xaml/windowsui/internal"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-        xmlns:dxcop="clr-namespace:DevExpress.Xpf.Controls.Primitives;assembly=DevExpress.Xpf.Controls.v18.2"
+        xmlns:dxcop="clr-namespace:DevExpress.Xpf.Controls.Primitives;assembly=DevExpress.Xpf.Controls.v19.1"
         xmlns:settings="clr-namespace:Sidebar.Properties"
         xmlns:viewmodel="clr-namespace:Sidebar.ViewModel"
         Topmost="{Binding AlwaysOnTop, Source={x:Static settings:Settings.Default}}"

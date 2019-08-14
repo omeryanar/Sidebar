@@ -54,6 +54,8 @@ namespace Sidebar.ViewModel
 
         #region Readonly
 
+        public INotification LastNotification { get; private set; }
+
         public ModuleLoader ModuleLoader { get; private set; }
 
         public ModulePage CurrentPage { get { return PageCollection.Pages[SelectedPageIndex]; } }
@@ -200,19 +202,25 @@ namespace Sidebar.ViewModel
 
             Mediator.Register(this, async (NotificationMessage message) =>
             {
-                INotification notification = NotificationService.CreatePredefinedNotification(message.Caption, message.Content, null, message.Image);
-                NotificationResult result = await notification.ShowAsync();
-                if (result == NotificationResult.Activated)
+                LastNotification?.Hide();
+                LastNotification = NotificationService.CreatePredefinedNotification(message.Caption, message.Content, null, message.Image);
+
+                await LastNotification.ShowAsync().ContinueWith(task =>
                 {
-                    App.BringToFront();
+                    if (task.Result == NotificationResult.Activated)
+                    {
+                        App.BringToFront();
 
-                    int pageIndex = PageCollection.GetPageIndex(message.Module);
-                    if (pageIndex >= 0)
-                        SelectedPageIndex = pageIndex;
+                        int pageIndex = PageCollection.GetPageIndex(message.Module);
+                        if (pageIndex >= 0)
+                            SelectedPageIndex = pageIndex;
 
-                    Properties.Settings.Default.IsCollapsed = false;
-                }
+                        Properties.Settings.Default.IsCollapsed = false;
+                    }
+
+                    LastNotification = null;
+                });
             });
-        }
+        }        
     }
 }
