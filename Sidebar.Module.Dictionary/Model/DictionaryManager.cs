@@ -3,9 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using DevExpress.Data.Filtering;
-using DevExpress.Xpo;
-using DevExpress.Xpo.DB;
+using LiteDB;
 using Sidebar.Module.Dictionary.Yandex;
 using Sidebar.Module.Dictionary.Yandex.Model;
 
@@ -13,17 +11,16 @@ namespace Sidebar.Module.Dictionary.Model
 {
     public class DictionaryManager
     {
-        public UnitOfWork UnitOfWork { get; private set; }
+        public ILiteCollection<DictionaryEntry> Dictionary { get; private set; }
 
         public DictionaryManager(string databaseName)
         {
             DirectoryInfo directory = Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Dictionary"));
-            string connectionString = SQLiteConnectionProvider.GetConnectionString(Path.Combine(directory.FullName, databaseName));
-
-            XpoDefault.DataLayer = XpoDefault.GetDataLayer(connectionString, AutoCreateOption.DatabaseAndSchema);
-            XpoDefault.Session = null;
-
-            UnitOfWork = new UnitOfWork();
+            LiteDatabase database = new LiteDatabase(Path.Combine(directory.FullName, databaseName));
+            
+            Dictionary = database.GetCollection<DictionaryEntry>("Dictionary");
+            Dictionary.EnsureIndex(x => x.Word);
+            Dictionary.EnsureIndex(x => x.Variations);
         }
 
         public async Task<string> Pronounce(string word, CultureInfo inputCulture)
@@ -44,10 +41,7 @@ namespace Sidebar.Module.Dictionary.Model
             LanguagePair languagePair = CreateLangPair(inputCulture, outputCulture);
             DictionaryResult dictionaryResult = await Search(word, languagePair, inputCulture).ConfigureAwait(false);
 
-            if (dictionaryResult == null || dictionaryResult.Definitions == null)
-                return null;
-
-            return dictionaryResult.Definitions.Select(x => new SearchResult { Word = x.Word, WordClass = x.WordClass, Inflections = x.Inflections,
+            return dictionaryResult?.Definitions?.Select(x => new SearchResult { Word = x.Word, WordClass = x.WordClass, Inflections = x.Inflections,
                 Definition = x.GetTranslations() }).ToArray();
         }
 
@@ -85,13 +79,13 @@ namespace Sidebar.Module.Dictionary.Model
         {
             word = word.ToLower(culture);
 
-            DictionaryEntity entity = SearchOffline(word, languagePair);
-            if (entity != null)
-                return entity.Definition.FromJson<DictionaryResult>();
+            DictionaryEntry entry = SearchOffline(word, languagePair);
+            if (entry != null)
+                return entry.Result;
 
             DictionaryResult result = await SearchOnline(word, languagePair, culture).ConfigureAwait(false);
-            if (result != null)
-                return result;            
+            if (result?.Definitions?.Length > 0)
+                return result;
 
             string correction = await YandexService.Correct(word, languagePair.InputLanguage).ConfigureAwait(false);            
             if (!String.IsNullOrWhiteSpace(correction) && String.Compare(word, correction, true, culture) != 0)
@@ -100,52 +94,40 @@ namespace Sidebar.Module.Dictionary.Model
             return null;
         }
 
-        private DictionaryEntity SearchOffline(string word, LanguagePair languagePair)
+        private DictionaryEntry SearchOffline(string word, LanguagePair languagePair)
         {
-            if (word.Contains("'"))
-                word = word.Replace("'", "''");
+            string language = languagePair.ToString();
+            DictionaryEntry entry = Dictionary.FindOne(Query.And(Query.EQ("Language", language), Query.EQ("Word", word)));
+            if (entry != null)
+                return entry;
 
-            CriteriaOperator searchOperator = CriteriaOperator.Parse(String.Format("Language == '{0}' && Word == '{1}'", languagePair, word));
-            XPCollection<DictionaryEntity> result = new XPCollection<DictionaryEntity>(UnitOfWork, searchOperator);
-
-            if (result.Count == 0)
-            {
-                searchOperator = CriteriaOperator.Parse(String.Format("Language == '{0}' && Contains(Variations, '|{1}|')", languagePair, word));
-                result = new XPCollection<DictionaryEntity>(UnitOfWork, searchOperator);
-            }
-
-            if (result.Count > 0)
-                return result[0];
-            else
-                return null;
+            return Dictionary.FindOne(Query.And(Query.EQ("Language", language), Query.Contains("Variations", String.Format("|{0}|", word))));
         }
 
         private async Task<DictionaryResult> SearchOnline(string word, LanguagePair languagePair, CultureInfo culture)
         {
-            DictionaryResult result =  await YandexService.Lookup(word, languagePair).ConfigureAwait(false);
-            if (result != null && result.Definitions != null && result.Definitions.Length > 0)
+            DictionaryResult result = await YandexService.Lookup(word, languagePair).ConfigureAwait(false);
+            if (result?.Definitions?.Length > 0)
             {
                 string returnedWord = result.Definitions[0].Word.ToLower(culture);
-                DictionaryEntity entity = SearchOffline(returnedWord, languagePair);
-                if (entity != null)
+                DictionaryEntry entry = SearchOffline(returnedWord, languagePair);
+                if (entry != null)
                 {
-                    entity.Variations += word + "|";
-                    entity.Save();
+                    entry.Variations += word + "|";
+                    Dictionary.Update(entry);
                 }
                 else
                 {
-                    entity = new DictionaryEntity(UnitOfWork);
-                    entity.Word = returnedWord;
-                    entity.Definition = result.ToJson();
-                    entity.Language = languagePair.ToString();
+                    entry = new DictionaryEntry();
+                    entry.Word = returnedWord;
+                    entry.Result = result;
+                    entry.Language = languagePair.ToString();
 
                     if (String.Compare(word, returnedWord, true, culture) != 0)
-                        entity.Variations += word + "|";
+                        entry.Variations += word + "|";
 
-                    entity.Save();
+                    Dictionary.Insert(entry);
                 }
-
-                UnitOfWork.CommitChanges();
             }
 
             return result;

@@ -63,7 +63,7 @@ namespace Sidebar.Module.Dictionary
 
         #region Fields
 
-        private DictionaryManager DictionaryManager;
+        private static DictionaryManager DictionaryManager;
 
         private ImageSource NotificationImage;
 
@@ -223,7 +223,9 @@ namespace Sidebar.Module.Dictionary
                 new CultureInfo("it"),
             };
 
-            DictionaryManager = new DictionaryManager("Dictionary.db");
+            if (DictionaryManager == null)
+                DictionaryManager = new DictionaryManager("Dictionary.db");
+
             NotificationImage = new BitmapImage(new Uri("pack://application:,,,/Sidebar.Module.Dictionary;component/Assets/Background.png"));
         }
     }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -70,41 +68,6 @@ namespace Sidebar.Module.Dictionary
         public static T ToEnum<T>(this string value)
         {
             return (T)Enum.Parse(typeof(T), value, true);
-        }
-
-        public static T FromJson<T>(this string value)
-        {
-            try
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
-                using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
-                {
-                    return (T)serializer.ReadObject(stream);
-                }
-            }
-            catch (Exception)
-            {
-                return default(T);
-            }
-        }
-
-        public static string ToJson(this object graph)
-        {
-            try
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(graph.GetType());
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    serializer.WriteObject(stream, graph);
-                    byte[] json = stream.ToArray();
-
-                    return Encoding.UTF8.GetString(json);
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
     }
 }

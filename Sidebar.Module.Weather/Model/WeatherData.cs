@@ -97,7 +97,7 @@ namespace Sidebar.Module.Weather.Model
 
         public WeatherInfo(WeatherData weatherData)
         {
-            Location = weatherData.City.Name;
+            Location = weatherData.City.Name.Replace(" Province", "");
             
             Details = new List<WeatherInfoDetail>();
             foreach (Forecast forecast in weatherData.Forecast)

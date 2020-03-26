@@ -7,7 +7,7 @@
         xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
         xmlns:dxwuii="http://schemas.devexpress.com/winfx/2008/xaml/windowsui/internal"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-        xmlns:dxcop="clr-namespace:DevExpress.Xpf.Controls.Primitives;assembly=DevExpress.Xpf.Controls.v19.1"
+        xmlns:dxcop="clr-namespace:DevExpress.Xpf.Controls.Primitives;assembly=DevExpress.Xpf.Controls.v19.2"
         xmlns:settings="clr-namespace:Sidebar.Properties"
         xmlns:viewmodel="clr-namespace:Sidebar.ViewModel"
         Topmost="{Binding AlwaysOnTop, Source={x:Static settings:Settings.Default}}"
@@ -156,14 +156,22 @@
                         <DataTrigger.EnterActions>
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="330,0,0,0" />
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="330,0,0,0">
+                                        <ThicknessAnimation.EasingFunction>
+                                            <SineEase EasingMode="EaseIn" />
+                                        </ThicknessAnimation.EasingFunction>
+                                    </ThicknessAnimation>
                                 </Storyboard>
                             </BeginStoryboard>
                         </DataTrigger.EnterActions>
                         <DataTrigger.ExitActions>
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" From="330,0,0,0" To="0,0,0,0" />
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" From="330,0,0,0" To="0,0,0,0">
+                                        <ThicknessAnimation.EasingFunction>
+                                            <SineEase EasingMode="EaseIn" />
+                                        </ThicknessAnimation.EasingFunction>
+                                    </ThicknessAnimation>
                                 </Storyboard>
                             </BeginStoryboard>
                         </DataTrigger.ExitActions>

@@ -51,6 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Gma.System.MouseKeyHook.dll</HintPath>
     </Reference>
+    <Reference Include="LiteDB, Version=5.0.4.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\LiteDB.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors">
       <HintPath>..\Library\MaterialDesignColors.dll</HintPath>
       <Private>False</Private>
@@ -82,7 +86,7 @@
     </Compile>
     <Compile Include="DictionaryViewModel.cs" />
     <Compile Include="Global\GlobalTextSelection.cs" />
-    <Compile Include="Model\DictionaryEntity.cs" />
+    <Compile Include="Model\DictionaryEntry.cs" />
     <Compile Include="Model\DictionaryManager.cs" />
     <Compile Include="Model\Extensions.cs" />
     <Compile Include="Model\SearchResult.cs" />
@@ -135,21 +139,15 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Library\DevExpress.Data.dll" />
-    <Content Include="Library\DevExpress.Xpo.dll" />
     <Content Include="Library\Gma.System.MouseKeyHook.dll" />
-    <Content Include="Library\SQLite.Interop.dll" />
-    <Content Include="Library\System.Data.SQLite.dll" />
+    <Content Include="Library\LiteDB.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Modules\"
 xcopy /y "$(TargetDir)tr\*.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\tr\"
 
-xcopy /y "$(TargetDir)Devexpress.Data.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
-xcopy /y "$(TargetDir)Devexpress.Xpo.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
 xcopy /y "$(TargetDir)Gma.System.MouseKeyHook.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
-xcopy /y "$(TargetDir)SQLite.Interop.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"
-xcopy /y "$(TargetDir)System.Data.SQLite.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"</PostBuildEvent>
+xcopy /y "$(TargetDir)LiteDB.dll" "$(SolutionDir)Sidebar\bin\$(ConfigurationName)\Library\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -146,11 +146,7 @@ namespace Sidebar.Module.Dictionary.Global
 
             Process process = Process.GetProcessById((int)processId);
             if (process != null)
-            {
-                string[] split = process.MainWindowTitle.Split('-');
-                if (split != null && split.Length > 0)
-                    return split[split.Length - 1].Trim();
-            }
+                return process.MainModule?.FileVersionInfo?.FileDescription;
 
             return String.Empty;
         }

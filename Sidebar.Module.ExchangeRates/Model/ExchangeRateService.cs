@@ -6,12 +6,14 @@ namespace Sidebar.Module.ExchangeRates.Model
 {
     public class ExchangeRateService
     {
+        protected const string BaseUrl = "http://data.fixer.io/api/";
+
         public static async Task<Exchange> GetExchangeRates(Currency baseCurrency)
         {
             string apiKey = ConfigurationHelper.GetAppSetting("FixerApiKey");
-            string requestUrl = String.Format(UrlFormat, apiKey);
+            string requestUrl = String.Format("latest?access_key={0}&symbols=USD,GBP,TRY", apiKey);
 
-            Exchange exchange = await HttpService.GetSerializedObject<Exchange>(requestUrl);
+            Exchange exchange = await HttpClientHelper.GetSerializedObject<Exchange>(BaseUrl, requestUrl);
             if (exchange != null && exchange.Rates != null)
             {
                 switch (baseCurrency)
@@ -36,7 +38,5 @@ namespace Sidebar.Module.ExchangeRates.Model
 
             return exchange;
         }
-
-        private const string UrlFormat = "http://data.fixer.io/api/latest?access_key={0}&symbols=USD,GBP,TRY";
     }
 }
