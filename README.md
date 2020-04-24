@@ -2,7 +2,7 @@
 
 Sidebar is a plugin-based windows application which displays widget-like apps at the rightmost of the screen. There are 8 built-in plugins and you can easily develop your own.
 
-No need to install, just download and run Sidebar.exe: https://github.com/omeryanar/Sidebar/releases/download/v1.3/Sidebar.zip
+No need to install, just download and run Sidebar.exe: https://github.com/omeryanar/Sidebar/releases/download/1.3/Sidebar.zip
 
 ![Sidebar](https://github.com/omeryanar/Resources/blob/master/Sidebar/Sidebar.png?raw=true)
 
