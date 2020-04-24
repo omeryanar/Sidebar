@@ -204,7 +204,8 @@
         </Canvas>
         <DockPanel Grid.Column="1" Width="355" Background="{DynamicResource MaterialDesignPaper}">
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-                <ListBox Margin="10" HorizontalAlignment="Left" SelectedIndex="{Binding SelectedPageIndex}" Style="{DynamicResource MaterialDesignToolToggleListBox}">
+                <ListBox Margin="10" HorizontalAlignment="Left" SelectedIndex="{Binding SelectedPageIndex}" Style="{DynamicResource MaterialDesignToolToggleListBox}"
+                         md:ListBoxAssist.IsToggle="False">
                     <ListBoxItem Content="1" Style="{StaticResource ToggleListBoxItem}" />
                     <ListBoxItem Content="2" Style="{StaticResource ToggleListBoxItem}" />
                     <ListBoxItem Content="3" Style="{StaticResource ToggleListBoxItem}" />
